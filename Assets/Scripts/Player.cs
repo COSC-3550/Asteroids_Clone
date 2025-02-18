@@ -10,11 +10,23 @@ public class Player : MonoBehaviour
     private Rigidbody2D _rigidbody;
     private bool _thrusting;
     private float _turnDirection;
+    public float respawnShieldTime = 3.0f;
     private void Awake() 
     {
         _rigidbody = GetComponent<Rigidbody2D>();
     }
 
+    private void OnEnable()
+    {
+        this.gameObject.layer = LayerMask.NameToLayer("NoCollision");
+        this.Invoke(nameof(TurnOnCollision), this.respawnShieldTime);
+    }
+
+    private void TurnOnCollision()
+    {
+        this.gameObject.layer = LayerMask.NameToLayer("Player");
+    }
+    
     private void Update()
     {
         _thrusting = Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.UpArrow);
